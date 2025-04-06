@@ -1,19 +1,24 @@
 # Healthcare Access and Hospitalization Risk Prediction
 
-## Overview
+## 📌 Overview
 
-This project explores how social determinants of health (SDOH)—including distance to healthcare facilities, poverty, and insurance coverage—impact estimated hospitalization risk at the county census tract level across the U.S.
+This project investigates the impact of social determinants of health (SDOH)—including geographic access to healthcare, poverty, insurance coverage, and environmental indicators—on estimated hospitalization risk at the U.S. census tract level.
 
-We use public data from the AHRQ SDOH database and the HealthData.gov Covid Impact database to build an engineered hospitalization risk score, perform exploratory data analysis, and develop machine learning models for predictive insight.
+Using publicly available datasets from the Agency for Healthcare Research and Quality (AHRQ) and HealthData.gov, we:
 
-## Objectives
+* Construct an engineered risk score to estimate hospitalization vulnerability.
+* Perform exploratory data analysis (EDA) to uncover patterns in SDOH indicators.
+* Develop and evaluate machine learning models to predict risk at the census tract level.
 
-* Clean and preprocess raw SDOH data and COVID Bed Utilization data.
-* Merge datasets where applicable
-* Engineer a hospitalization risk score using key social and geographic indicators.
-* Test hypotheses about healthcare access disparities.
-* Build a predictive model using regression techniques.
-* Visualize risk patterns and feature importance.
+
+## 🎯 Objectives
+
+* Clean and preprocess raw SDOH and COVID hospital capacity datasets.
+* Integrate data sources across varying geographic levels (tract and hospital).
+* Engineer a composite hospitalization risk score using key socioeconomic and geographic indicators.
+* Test hypotheses around healthcare access disparities and their relationship to hospitalization.
+* Build and evaluate regression-based predictive models.
+* Visualize hospitalization risk and feature importance at the national level.
 
 ## Data Sources
 
@@ -27,29 +32,43 @@ We use public data from the AHRQ SDOH database and the HealthData.gov Covid Impa
 *  **Data Level:** Hospital (Weekly)
 *  **Time Frame:** Source contains data from 2020 to 2024
 
-## Methodology
+## ⚙️ Methodology
 
-* Data Cleaning & Imputation
-* Feature Engineering (Risk Score)
+* Data Cleaning
+Standardized and imputed missing values for demographic and hospital data.
+
+* Feature Engineering
+Created a hospitalization risk score using weighted metrics such as poverty rate, access to care, insurance coverage, and population vulnerability.
+
+* Data Integration
+Linked census tracts to nearby hospitals via geospatial methods for richer context.
+
+* Exploratory Data Analysis (EDA)
+Uncovered regional patterns and trends using descriptive statistics and visualizations.
+
 * Hypothesis Testing
-* Predictive Modeling (Regression)
-* Visualization: Heatmaps, Feature Importance, Risk Maps
+Conducted statistical tests to assess the relationship between access to healthcare and hospitalization metrics.
+
+* Modeling
+Implemented regression-based models (e.g., Linear Regression, XGBoost) to predict hospitalization risk based on SDOH features.
+
+* Visualization
+Developed heatmaps, choropleth maps, and feature importance plots to communicate findings.
 
 ## Key Features Used
 
-* Distance to nearest emergency department and health clinic
-* Poverty rate
-* Uninsured rate (plus Medicaid and private insurance coverage)
-* Disability rate and percentage of elderly population
-* PM2.5 air pollution levels
+* Geographic Access: Distance to nearest emergency department and health clinics
+* Socioeconomic: Poverty rate, uninsured rate, Medicaid/private insurance coverage
+* Demographics: Percent elderly population, disability rate
+*Environmental: PM2.5 air pollution exposure
 
 ## Tools & Technologies
 
-* Python (Pandas, NumPy, scikit-learn, Matplotlib, Seaborn, XGBoost)
-* R (tidyverse, dplyr, ggplot2, caret, readr)
-* SQL (MSSSQL)
-* Jupyter Notebooks
-* GitHub for version control and collaboration
+* Python - Data processing, modeling, visualization (pandas, scikit-learn, matplotlib, seaborn, xgboost)
+* R - Data wrangling, statistical analysis, and plotting (tidyverse, dplyr, ggplot2)
+* SQL - Querying and managing structured datasets (MSSSQL)
+* Jupyter Notebooks - Prototyping and documenting analysis
+* GitHub - Version control and team collaboration
 
 ## Team
 * June Lemieux
