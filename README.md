@@ -55,14 +55,14 @@ Implemented regression-based models (e.g., Linear Regression, XGBoost) to predic
 * Visualization
 Developed heatmaps, choropleth maps, and feature importance plots to communicate findings.
 
-## Key Features Used
+## 🔑 Key Features
 
 * Geographic Access: Distance to nearest emergency department and health clinics
 * Socioeconomic: Poverty rate, uninsured rate, Medicaid/private insurance coverage
 * Demographics: Percent elderly population, disability rate
 *Environmental: PM2.5 air pollution exposure
 
-## Tools & Technologies
+## 🧰 Tools & Technologies
 
 * Python - Data processing, modeling, visualization (pandas, scikit-learn, matplotlib, seaborn, xgboost)
 * R - Data wrangling, statistical analysis, and plotting (tidyverse, dplyr, ggplot2)
@@ -70,7 +70,8 @@ Developed heatmaps, choropleth maps, and feature importance plots to communicate
 * Jupyter Notebooks - Prototyping and documenting analysis
 * GitHub - Version control and team collaboration
 
-## Team
+## 👥 Team
+
 * June Lemieux
 * Mehmet Comert
 * Melody Rios
