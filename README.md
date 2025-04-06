@@ -60,7 +60,7 @@ Developed heatmaps, choropleth maps, and feature importance plots to communicate
 * Geographic Access: Distance to nearest emergency department and health clinics
 * Socioeconomic: Poverty rate, uninsured rate, Medicaid/private insurance coverage
 * Demographics: Percent elderly population, disability rate
-*Environmental: PM2.5 air pollution exposure
+* Environmental: PM2.5 air pollution exposure
 
 ## 🧰 Tools & Technologies
 
