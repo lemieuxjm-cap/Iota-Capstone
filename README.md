@@ -10,7 +10,6 @@ Using publicly available datasets from the Agency for Healthcare Research and Qu
 * Perform exploratory data analysis (EDA) to uncover patterns in SDOH indicators.
 * Develop and evaluate machine learning models to predict risk at the census tract level.
 
-
 ## 🎯 Objectives
 
 * Clean and preprocess raw SDOH and COVID hospital capacity datasets.
@@ -23,37 +22,24 @@ Using publicly available datasets from the Agency for Healthcare Research and Qu
 ## 🗂️ Data Sources
 
 * **Agency for Healthcare Research and Quality (AHRQ) – SDOH Database at:** [https://www.ahrq.gov/sdoh/data-analytics/sdoh-data.html](https://www.ahrq.gov/sdoh/data-analytics/sdoh-data.html)
-* **Data Download Source:** Census Tract Data 2009-2020 (2020) at: [https://www.ahrq.gov/downloads/sdoh/sdoh_2020_tract_1_0.xlsx](https://www.ahrq.gov/downloads/sdoh/sdoh_2020_tract_1_0.xlsx)
-* **Data Level:** Census Tract (Annually)
-* **Time Frame:** Most recent available year(s)
+* Data Download Source: Census Tract Data 2009-2020 (2020) at: [https://www.ahrq.gov/downloads/sdoh/sdoh_2020_tract_1_0.xlsx](https://www.ahrq.gov/downloads/sdoh/sdoh_2020_tract_1_0.xlsx)
+* Data Level: Census Tract (Annually)
+* Time Frame: Most recent available year(s)
 
 * **Healthdata.gov COVID-19 Reported Patient Impact and Hospital Capacity by Facility Database at:** [https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data)
-*  **Data Download Source:** [https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data)
-*  **Data Level:** Hospital (Weekly)
-*  **Time Frame:** Source contains data from 2020 to 2024
+*  Data Download Source: [https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data)
+*  Data Level: Hospital (Weekly)
+*  Time Frame: Source contains data from 2020 to 2024
 
 ## ⚙️ Methodology
 
-* Data Cleaning
-Standardized and imputed missing values for demographic and hospital data.
-
-* Feature Engineering
-Created a hospitalization risk score using weighted metrics such as poverty rate, access to care, insurance coverage, and population vulnerability.
-
-* Data Integration
-Linked census tracts to nearby hospitals via geospatial methods for richer context.
-
-* Exploratory Data Analysis (EDA)
-Uncovered regional patterns and trends using descriptive statistics and visualizations.
-
-* Hypothesis Testing
-Conducted statistical tests to assess the relationship between access to healthcare and hospitalization metrics.
-
-* Modeling
-Implemented regression-based models (e.g., Linear Regression, XGBoost) to predict hospitalization risk based on SDOH features.
-
-* Visualization
-Developed heatmaps, choropleth maps, and feature importance plots to communicate findings.
+* Data Cleaning: Standardized and imputed missing values for demographic and hospital data.
+* Feature Engineering: Created a hospitalization risk score using weighted metrics such as poverty rate, access to care, insurance coverage, and population vulnerability.
+* Data Integration: Linked census tracts to nearby hospitals via geospatial methods for richer context.
+* Exploratory Data Analysis (EDA): Uncovered regional patterns and trends using descriptive statistics and visualizations.
+* Hypothesis Testing: Conducted statistical tests to assess the relationship between access to healthcare and hospitalization metrics.
+* Modeling: Implemented regression-based models (e.g., Linear Regression, XGBoost) to predict hospitalization risk based on SDOH features.
+* Visualization: Developed heatmaps, choropleth maps, and feature importance plots to communicate findings.
 
 ## 🔑 Key Features
 
@@ -64,11 +50,11 @@ Developed heatmaps, choropleth maps, and feature importance plots to communicate
 
 ## 🧰 Tools & Technologies
 
-* Python - Data processing, modeling, visualization (pandas, scikit-learn, matplotlib, seaborn, xgboost)
-* R - Data wrangling, statistical analysis, and plotting (tidyverse, dplyr, ggplot2)
-* SQL - Querying and managing structured datasets (MSSSQL)
-* Jupyter Notebooks - Prototyping and documenting analysis
-* GitHub - Version control and team collaboration
+* Python: Data processing, modeling, visualization (pandas, scikit-learn, matplotlib, seaborn, xgboost)
+* R: Data wrangling, statistical analysis, and plotting (tidyverse, dplyr, ggplot2)
+* SQL: Querying and managing structured datasets (MSSSQL)
+* Jupyter Notebooks: Prototyping and documenting analysis
+* GitHub: Version control and team collaboration
 
 ## 👥 Team
 
