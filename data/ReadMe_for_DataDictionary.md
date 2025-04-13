@@ -5,7 +5,7 @@ This codebook provides detailed descriptions of variables used in the analysis.
 ## Summary of Variables
 
 **By Category:**
-- Socioeconomic: 4 variables
+- Socioeconomic: 5 variables
 - Housing & Transportation: 6 variables
 - Healthcare Access: 3 variables
 - Demographic Vulnerability: 3 variables
@@ -15,7 +15,7 @@ This codebook provides detailed descriptions of variables used in the analysis.
 
 **By Inclusion Status:**
 - Core: 11 variables
-- Exploratory: 9 variables
+- Exploratory: 10 variables
 - Optional – Grouping: 3 variables
 
 ## Variable Definitions
