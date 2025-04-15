@@ -5,7 +5,7 @@ This codebook provides detailed descriptions of variables used in the analysis.
 ## Summary of Variables
 
 **By Category:**
-- Socioeconomic: 4 variables
+- Socioeconomic: 5 variables
 - Housing & Transportation: 6 variables
 - Healthcare Access: 3 variables
 - Demographic Vulnerability: 3 variables
@@ -15,7 +15,7 @@ This codebook provides detailed descriptions of variables used in the analysis.
 
 **By Inclusion Status:**
 - Core: 11 variables
-- Exploratory: 9 variables
+- Exploratory: 10 variables
 - Optional – Grouping: 3 variables
 
 ## Variable Definitions
@@ -46,7 +46,8 @@ This codebook provides detailed descriptions of variables used in the analysis.
 | Population_density           | CEN_POPDENSITY_TRACT         | Population density (Census Tract)                                                                                                                                         | Numeric     | Higher population density is often associated with urban settings, affecting both access to healthcare and environmental exposures relevant to hospitalization.         | Core                | Geographic Context        |
 | County                       | COUNTY                       | County name                                                                                                                                                               | Categorical | Used to group or stratify data at the county level; important for geographic analysis but not a predictive feature.                                                     | Optional – Grouping | Categorical Identifiers   |
 | CountyFIPS                   | COUNTYFIPS                   | 5-digit Federal Information Processing Standards (FIPS) code uniquely identifying each U.S. county.                                                                       | Categorical | Serves as the unique geographic identifier for joining and aggregating data at the county level.                                                                        | Core                | Categorical Identifiers   |
-| Is_Metro_Micro               | IS_METRO_MICRO               | Boolean indicator for whether the county is part of a metropolitan or micropolitan statistical area (TRUE = yes, FALSE = no)                                              | Boolean | Identifies whether a county falls within a metropolitan or micropolitan area, which can influence healthcare access, hospital capacity, and population density              | Exploratory         | Geographic Context        |
+| Is_Metro_Micro               | IS_METRO_MICRO               | Boolean indicator for whether the county is part of a metropolitan or micropolitan statistical area (TRUE = yes, FALSE = no)                                              | Boolean     | Identifies whether a county falls within a metropolitan or micropolitan area, which can influence healthcare access, hospital capacity, and population density          | Exploratory         | Geographic Context        |
+| Pct_hh_no_internet           | ACS_PCT_HH_NO_INTERNET       | Percentage of households with no internet access                                                                                                                          | Numeric     | No internet limits healthcare access, appointment scheduling, and health information, delaying care and increasing hospitalizaiton                                      | Exploratory         | Socioeconomic             |
 | Distance_to_ED               | POS_DIST_ED_TRACT            | Distance in miles to the nearest emergency department, calculated using population weighted tract centroids                                                               | Numeric     | Greater distance to emergency departments often delays access to urgent care, increasing the severity of conditions upon arrival and the likelihood of hospitalization. | Core                | Healthcare Access         |
 | Distance_to_medsurge_icu     | POS_DIST_MEDSURG_ICU_TRACT   | Distance in miles to the nearest medical-surgical ICU, calculated using population weighted tract centroids                                                               | Numeric     | Access to medical/surgical ICUs impacts outcomes for critically ill patients, influencing hospitalization rates in emergency scenarios.                                 | Core                | Healthcare Access         |
 | Region                       | REGION                       | Census region name, may assist in regional analysis                                                                                                                       | Categorical | Regional classification variable that may support analysis of geographic trends and disparities in hospitalization patterns.                                            | Optional – Grouping | Categorical Identifiers   |
