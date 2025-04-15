@@ -67,7 +67,7 @@ Using publicly available datasets from the **Agency for Healthcare Research and 
 
 ## 👥 Team
 
-*June Lemieux
+* June Lemieux
 * Mehmet Comert
 * Melody Rios
 * Rea Kelolli  
