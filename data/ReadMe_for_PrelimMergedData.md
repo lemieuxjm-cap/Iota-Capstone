@@ -1,4 +1,4 @@
-# Summary of datacleansing, processing, and merging
+# Summary of data cleansing, wrangling, and merging datasets
 
 ## DATA SOURCES
 ### SDOH dataset
