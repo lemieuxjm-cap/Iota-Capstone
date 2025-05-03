@@ -31,14 +31,14 @@
 1. Identify and replace empty strings or '-999999' with zero
 2. Identify and replace invalid or add missing zipcodes and FIPS
 3. Group records by hospital to sum total_beds_7_day_avg,inpatient_beds_used_7_day_avg,inpatient_beds_used_covid_7_day_avg
-4. Compute hospital-level bed utilization
+4. Compute hospital-level bed utilization as BED_UTIL_RATIO
 5. Group records by FIPS to calculate FIPS-level bed utilization
 6. Results from query were manually copied to an Excel sheet and saved as /data/PreliminaryMergedData/HOSP_FIPS_UTIL.csv for future import 
 
 ### Referencing /data/PreliminaryMergedData/02_DataWranglingSDOH_FEATURES.sql
 1. Identify any invalid COUNTRYFIPS values (none found)
 2. Identify and replace empty strings with zero
-3. Group records by FIPS to calculate FIPS-level bed utilization
+3. Group records by FIPS to calculate FIPS-level bed utilization as BED_UTIL_RATIO
 4. Realized ACS_MEDIAN_HH_INC_sum should have been an average (not total)
 5. Recalc and replace data
 6. Results from query were manually copied to an Excel sheet and saved as /data/PreliminaryMergedData/SDOH_FIPS_FEAT.csv for future import
@@ -48,8 +48,8 @@
 1. Import /data/PreliminaryMergedData/SDOH_FIPS_FEAT.csv file into SQLServer as table JML03
 2. Import /data/PreliminaryMergedData/HOSP_FIPS_UTIL.csv file into SQLServer as table JML04
 3. Merge JML04 into JML03 (matching on FIPS code)
-4. If matching FIPS codes were found, the observations were updated with the FIPSUtil and is_metro_micro data  
-5. If matching FIPS codes were not found, new observation records were created in JML03 with null feature data and populated FIPSUtil and is_metro_micro data 
+4. If matching FIPS codes were found, the observations were updated with BED_UTIL_RATIO and is_metro_micro data  
+5. If matching FIPS codes were not found, new observation records were created in JML03 with null feature data and populated BED_UTIL_RATIO and is_metro_micro data 
 
 ## DELIVERY
 1. The merged dataset in JML03 was exported from SQL Server to a .csv file
