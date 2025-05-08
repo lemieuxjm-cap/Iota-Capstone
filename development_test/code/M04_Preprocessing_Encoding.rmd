@@ -1,0 +1,402 @@
+---
+title: "DSE6311 M04: Preprocessing and Encoding"
+author: "June Lemieux"
+date: "April 11, 2024"
+output: pdf_document
+---
+
+# EDA
+# Libraries/import data
+```{r}
+library(knitr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(corrplot)
+library(ggcorrplot)
+library(olsrr)
+library(Hmisc)
+library(plotly)
+library(e1071)
+library(moments)
+library(formattable)
+library(caret)
+library(rsample)
+library(h2o)
+
+
+set.seed(275)
+```
+
+```{r}
+# import all data 
+SDOH_data_df <- read.csv('MERGED_SDOH_PLUS_UTIL.csv')
+
+# reduce df to ~20 features
+SDOH_reducedTo20_df <- SDOH_data_df %>% 
+                    select (-c(ACS_PCT_COMMT_60MINUP_avg
+                                ,ACS_PCT_HH_FOOD_STMP_avg
+                                ,ACS_PCT_HU_COAL_avg
+                                ,ACS_PCT_LT_HS_avg
+                                ,ACS_PCT_MEDICAID_ANY_avg
+                                ,ACS_PCT_MEDICARE_ONLY_avg
+                                ,ACS_PCT_POV_ASIAN_avg
+                                ,ACS_PCT_POV_BLACK_avg
+                                ,ACS_PCT_POV_HISPANIC_avg
+                                ,ACS_PCT_POV_WHITE_avg
+                                ,ACS_PCT_PRIVATE_ANY_avg
+                                ,ACS_PCT_PUBLIC_ONLY_avg
+                                ,ACS_PCT_UNINSURED_avg
+                                ,ACS_PCT_UNINSURED_BELOW64_avg
+                                ,POS_DIST_CLINIC_TRACT_avg
+                                ,POS_DIST_TRAUMA_TRACT_avg
+                                ,WUSTL_AVG_PM25_avg
+                                ,ACS_AVG_HH_SIZE_avg
+                                ,ACS_PCT_ENGL_NOT_ALL_avg
+                                ,ACS_PCT_HH_INTERNET_avg
+                                ,ACS_PCT_HH_INC_10000_avg
+                                ,ACS_PCT_HH_FOOD_STMP_BLW_POV_avg))
+
+# write.csv(SDOH_reducedTo20_df, 
+#           file='C:\\Users\\Sean\\Documents\\00 Merrimack\\
+#           DSE6311\\Week 4\\DataFromM03\\MERGED_SDOH_PLUS_UTIL_20.csv'
+#           , row.names=FALSE)
+
+# rename variables to new, readable names
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df %>%
+          rename(CountyFIPS=COUNTYFIPS
+                  ,State=STATE
+                  ,County=COUNTY
+                  ,Region=REGION
+                  ,Total_population_poverty=ACS_TOT_POP_POV_sum
+                  ,Pct_disabled=ACS_PCT_DISABLE_avg
+                  ,Pct_age_65plus=ACS_PCT_AGE_ABOVE65_avg
+                  ,Pct_single_parent=ACS_PCT_CHILD_1FAM_avg
+                  ,Median_hh_income=ACS_MEDIAN_HH_INC_sum
+                  ,Pct_hh_65_alone=ACS_PCT_HH_ALONE_ABOVE65_avg
+                  ,Pct_mobile_homes=ACS_PCT_HU_MOBILE_HOME_avg
+                  ,Pct_owner_cost_30plus=ACS_PCT_OWNER_HU_COST_30PCT_avg
+                  ,Pct_renter_cost_30pct_plus=ACS_PCT_RENTER_HU_COST_30PCT_avg
+                  ,Pct_renter_cost_50pct_plus=ACS_PCT_RENTER_HU_COST_50PCT_avg
+                  ,Pct_renter_occupied=ACS_PCT_RENTER_HU_avg
+                  ,Pct_homes_no_vehicle=ACS_PCT_HU_NO_VEH_avg
+                  ,Pct_public_transit=ACS_PCT_PUBL_TRANSIT_avg
+                  ,Land_area_sqmi=CEN_AREALAND_SQM_TRACT_avg
+                  ,Population_density=CEN_POPDENSITY_TRACT_avg
+                  ,Distance_to_ED=POS_DIST_ED_TRACT_avg
+                  ,Distance_to_medsurge_icu=POS_DIST_MEDSURG_ICU_TRACT_avg
+                  ,Bed_util_ratio=HOSP_FIPS_UTIL
+                  ,Is_Metro_Micro=IS_METRO_MICRO)
+
+# recast datatypes from string to numeric
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df %>%
+                      mutate(across(c(
+                              Total_population_poverty
+                              ,Pct_disabled
+                              ,Pct_age_65plus
+                              ,Pct_single_parent
+                              ,Median_hh_income
+                              ,Pct_hh_65_alone
+                              ,Pct_mobile_homes
+                              ,Pct_owner_cost_30plus
+                              ,Pct_renter_cost_30pct_plus
+                              ,Pct_renter_cost_50pct_plus
+                              ,Pct_renter_occupied
+                              ,Pct_homes_no_vehicle
+                              ,Pct_public_transit
+                              ,Land_area_sqmi
+                              ,Population_density
+                              ,Distance_to_ED
+                              ,Distance_to_medsurge_icu
+                              ,Bed_util_ratio),as.numeric))
+
+# write.csv(SDOH_reducedTo20_df, 
+#           file='MERGED_SDOH_PLUS_UTIL_20_RenamedColumns.csv'
+#           , row.names=FALSE)
+```
+
+```{r}
+# reduce df to just feature variables to test multicollinearity, vif
+# , missingness
+# do not use this dataset beyond this block
+SDOH_reducedTo20_featuresonly_df <- SDOH_reducedTo20_df %>% 
+                    select (-c(CountyFIPS, State, County, Region
+                               , Is_Metro_Micro))
+
+# to see the correlation diagnostics
+modeltest <- lm(Bed_util_ratio ~ ., data = SDOH_reducedTo20_featuresonly_df)
+ols_vif_tol(modeltest)
+# write.csv(ols_vif_tol(modeltest), 
+#   file='output_20var_vif_tol.csv', row.names=FALSE)
+
+ols_eigen_cindex(modeltest)
+# write.csv(ols_eigen_cindex(modeltest), 
+#   file='output_20var_eigen_cindex.csv', row.names=FALSE)
+
+# open the pdf()
+pdf('ols_20var_plot_diagnostics.pdf'
+    , width = 15, height = 15)
+# create plot
+ols_plot_diagnostics(modeltest)
+# close the pdf()
+dev.off()
+
+# want to remove  2 outlier obs ?? *****
+# The Cook's D Chart identified 2 potential outliers: Obs # 1966 and 615
+# the same observation #s were identified as potential outlier & high leverage
+# Obs 615 relates to FIPS 17129
+# Obs 1966 relates to FIPS 32009
+
+#Missingness
+NAfrequency_counts <- SDOH_reducedTo20_featuresonly_df %>%
+                summarise(across(everything(), ~ sum(is.na(.))))
+
+# write.csv(NAfrequency_counts, 
+#   file='output_20var_NAfrequency_counts.csv', row.names=FALSE)
+
+zero_frequency_counts <-  SDOH_reducedTo20_featuresonly_df %>%
+          summarise(across(where(is.numeric), ~ sum(. == 0, na.rm = TRUE)))
+# write.csv(zero_frequency_counts, 
+#   file='output_20var_zerofrequency_counts.csv', row.names=FALSE)
+```
+
+
+```{r}
+# remove the 5 records with all null feature data
+#### STOP ! Need to have all the variables, not just the number ones ######
+# check null counts
+Five_Null_Records <- which(SDOH_reducedTo20_df$State %in% c("AK", "MP"))[1:5]
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df[-Five_Null_Records, ]
+
+NAfrequency_counts_after5removed <- SDOH_reducedTo20_df %>%
+                summarise(across(everything(), ~ sum(is.na(.))))
+print(NAfrequency_counts_after5removed)
+# now only the 818 NA Bed_util_ratio records are left
+
+# check zero counts
+zero_frequency_counts_after5removed <-  SDOH_reducedTo20_df %>%
+                summarise(across(where(is.numeric)
+                   , ~ sum(. == 0, na.rm = TRUE)))
+print(zero_frequency_counts_after5removed)
+# 91 records have zeros: total_population_poverty, pct_disabled, pct_age_65plus
+# remove these 91 records
+These_91_zero_records <-which(SDOH_reducedTo20_df$Pct_disabled == 0) 
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df[-These_91_zero_records, ]
+
+zero_frequency_counts_after96removed <-  SDOH_reducedTo20_df %>%
+                summarise(across(where(is.numeric)
+                   , ~ sum(. == 0, na.rm = TRUE)))
+```
+
+```{r}
+#Test Encoding (then revisit train/test once parameter count is identified)
+#Binary encoding for Is_metro_micro (TRUE/FALSE/NULL)
+Trial_SDOH_reducedTo20_df <- SDOH_reducedTo20_df
+
+Trial_SDOH_reducedTo20_df$Is_Metro_Micro_binary <-
+    ifelse(Trial_SDOH_reducedTo20_df$Is_Metro_Micro == "TRUE", 1,
+          ifelse(Trial_SDOH_reducedTo20_df$Is_Metro_Micro == "FALSE",0, NA))
+# note to June: drop original column
+Trial_SDOH_reducedTo20_df <- select (Trial_SDOH_reducedTo20_df, -Is_Metro_Micro)
+
+#one-hot region
+oh_region <- dummyVars(~ Region, data = Trial_SDOH_reducedTo20_df)
+oh_region_newdata <- predict(oh_region, newdata = Trial_SDOH_reducedTo20_df)
+#class(oh_region_newdata)
+Trial_SDOH_reducedTo20_df <- cbind(Trial_SDOH_reducedTo20_df, oh_region_newdata)
+Trial_SDOH_reducedTo20_df <- select (Trial_SDOH_reducedTo20_df, -Region)
+
+# target encoding for state
+# need to drop original column
+target_state <- aggregate(Bed_util_ratio ~ State, 
+                        data = Trial_SDOH_reducedTo20_df, FUN = mean)
+Trial_SDOH_reducedTo20_df <- merge(Trial_SDOH_reducedTo20_df, 
+                       target_state, by = "State", suffixes = c("", "_target"))
+# need to drop original column
+
+# interim save file
+# write.csv(Trial_SDOH_reducedTo20_df, 
+#   file='Trial_SDOH_reducedTo20_df_afterEncoding.csv', row.names=FALSE)
+```
+
+```{r}
+#calculate train/test ratio with 23 predictors
+# remember to add attribution to Dr. Geist in final report *****
+  ## If the number of parameters isn't supplied, set 
+  ## it to the number of features minus 1 for the target
+  p  <- 23
+  df <- SDOH_reducedTo20_df 
+
+  #if(is.na(p)) {
+  #  p <- ncol(df) -1   ## not used because I have the p count
+  #}
+  
+  ## Calculate the ideal number of testing set
+  test_N <- (1/sqrt(p))*nrow(df)
+  ## Turn that into a testing proportion
+  test_prop <- round((1/sqrt(p))*nrow(df)/nrow(df), 2)
+  ## And find the training proportion
+  train_prop <- 1-test_prop
+  
+  ## Tell us the results!
+  print(paste("The ideal split ratio is ", train_prop, ":", test_prop
+              , " training:testing"))
+  
+# The ideal split ratio is 0.79:0.21 training:testing
+
+```
+  
+```{r}
+#start with full data set again, reduce variables, apply train:test split
+# reduce df to ~20 features
+SDOH_reducedTo20_df <- SDOH_data_df %>% 
+                    select (-c(ACS_PCT_COMMT_60MINUP_avg
+                                ,ACS_PCT_HH_FOOD_STMP_avg
+                                ,ACS_PCT_HU_COAL_avg
+                                ,ACS_PCT_LT_HS_avg
+                                ,ACS_PCT_MEDICAID_ANY_avg
+                                ,ACS_PCT_MEDICARE_ONLY_avg
+                                ,ACS_PCT_POV_ASIAN_avg
+                                ,ACS_PCT_POV_BLACK_avg
+                                ,ACS_PCT_POV_HISPANIC_avg
+                                ,ACS_PCT_POV_WHITE_avg
+                                ,ACS_PCT_PRIVATE_ANY_avg
+                                ,ACS_PCT_PUBLIC_ONLY_avg
+                                ,ACS_PCT_UNINSURED_avg
+                                ,ACS_PCT_UNINSURED_BELOW64_avg
+                                ,POS_DIST_CLINIC_TRACT_avg
+                                ,POS_DIST_TRAUMA_TRACT_avg
+                                ,WUSTL_AVG_PM25_avg
+                                ,ACS_AVG_HH_SIZE_avg
+                                ,ACS_PCT_ENGL_NOT_ALL_avg
+                                ,ACS_PCT_HH_INTERNET_avg
+                                ,ACS_PCT_HH_INC_10000_avg
+                                ,ACS_PCT_HH_FOOD_STMP_BLW_POV_avg))
+
+# write.csv(SDOH_reducedTo20_df, file='MERGED_SDOH_PLUS_UTIL_20.csv'
+#      , row.names=FALSE)
+# rename to new names
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df %>%
+          rename(CountyFIPS=COUNTYFIPS
+                  ,State=STATE
+                  ,County=COUNTY
+                  ,Region=REGION
+                  ,Total_population_poverty=ACS_TOT_POP_POV_sum
+                  ,Pct_disabled=ACS_PCT_DISABLE_avg
+                  ,Pct_age_65plus=ACS_PCT_AGE_ABOVE65_avg
+                  ,Pct_single_parent=ACS_PCT_CHILD_1FAM_avg
+                  ,Median_hh_income=ACS_MEDIAN_HH_INC_sum
+                  ,Pct_hh_65_alone=ACS_PCT_HH_ALONE_ABOVE65_avg
+                  ,Pct_mobile_homes=ACS_PCT_HU_MOBILE_HOME_avg
+                  ,Pct_owner_cost_30plus=ACS_PCT_OWNER_HU_COST_30PCT_avg
+                  ,Pct_renter_cost_30pct_plus=ACS_PCT_RENTER_HU_COST_30PCT_avg
+                  ,Pct_renter_cost_50pct_plus=ACS_PCT_RENTER_HU_COST_50PCT_avg
+                  ,Pct_renter_occupied=ACS_PCT_RENTER_HU_avg
+                  ,Pct_homes_no_vehicle=ACS_PCT_HU_NO_VEH_avg
+                  ,Pct_public_transit=ACS_PCT_PUBL_TRANSIT_avg
+                  ,Land_area_sqmi=CEN_AREALAND_SQM_TRACT_avg
+                  ,Population_density=CEN_POPDENSITY_TRACT_avg
+                  ,Distance_to_ED=POS_DIST_ED_TRACT_avg
+                  ,Distance_to_medsurge_icu=POS_DIST_MEDSURG_ICU_TRACT_avg
+                  ,Bed_util_ratio=HOSP_FIPS_UTIL
+                  ,Is_Metro_Micro=IS_METRO_MICRO)
+# change datatype from string to numeric
+SDOH_reducedTo20_df <- SDOH_reducedTo20_df %>%
+                      mutate(across(c(
+                              Total_population_poverty
+                              ,Pct_disabled
+                              ,Pct_age_65plus
+                              ,Pct_single_parent
+                              ,Median_hh_income
+                              ,Pct_hh_65_alone
+                              ,Pct_mobile_homes
+                              ,Pct_owner_cost_30plus
+                              ,Pct_renter_cost_30pct_plus
+                              ,Pct_renter_cost_50pct_plus
+                              ,Pct_renter_occupied
+                              ,Pct_homes_no_vehicle
+                              ,Pct_public_transit
+                              ,Land_area_sqmi
+                              ,Population_density
+                              ,Distance_to_ED
+                              ,Distance_to_medsurge_icu
+                              ,Bed_util_ratio),as.numeric))
+
+# split full data set into training and test
+train_test_split <- initial_split(SDOH_reducedTo20_df, prop = 0.79)
+
+training_data <- training(train_test_split)
+testing_data <- testing(train_test_split)
+  
+```
+
+```{r}
+# Encode on train and test sets
+
+# Binary encoding for Is_metro_micro (TRUE/FALSE/NULL) - 1st training, 2nd test
+# remaining NAs will be encoded via unsupervised methods below
+training_data$Is_Metro_Micro_binary <- 
+  ifelse(training_data$Is_Metro_Micro == "TRUE", 1,
+                      ifelse(training_data$Is_Metro_Micro == "FALSE",0, NA))
+
+testing_data$Is_Metro_Micro_binary <- 
+  ifelse(testing_data$Is_Metro_Micro == "TRUE", 1,
+                      ifelse(testing_data$Is_Metro_Micro == "FALSE",0, NA))
+
+#one-hot Region - 1st training set, 2nd test
+onehot_region_training <- dummyVars( ~ Region, data = training_data)
+onehot_region_test <- dummyVars( ~ Region, data = testing_data) 
+
+onehot_region_training_newdata <- 
+  predict(onehot_region_training, newdata = training_data)
+onehot_region_test_newdata <- 
+  predict(onehot_region_test, newdata = testing_data)
+
+training_data <- cbind(training_data, onehot_region_training_newdata)
+testing_data <- cbind(testing_data, onehot_region_test_newdata)
+
+# drop original Region column
+training_data <- training_data %>% select(-c(Region))
+testing_data <- testing_data %>% select(-c(Region))
+
+# target encoding for State - 1st training set, 2nd test
+target_state_training <- 
+  aggregate(Bed_util_ratio ~ State, data = training_data, FUN = mean)
+target_state_test <- 
+  aggregate(Bed_util_ratio ~ State, data = testing_data, FUN = mean)
+
+# rename the encoded variable in both the training and test encoding sets
+# before bringing it back into the main sets
+target_state_training <- target_state_training %>%
+                          rename(state_encoded = Bed_util_ratio)
+target_state_test <- target_state_test %>%
+                          rename(state_encoded = Bed_util_ratio)
+
+# merge encoded variable back to source set
+# all = TRUE to keep all records
+training_data <- 
+  merge(training_data, target_state_training, by = "State"
+        , suffixes = c("", ""), all = TRUE)
+testing_data <- 
+  merge(testing_data, target_state_test, by = "State"
+        , suffixes = c("", ""), all = TRUE)
+
+# drop original columns
+training_data <- training_data %>% select(-c(Is_Metro_Micro, State, County))
+testing_data <- testing_data %>% select(-c(Is_Metro_Micro, State, County))
+
+# export training and test data sets
+write.csv(training_data, file='training_data.csv'
+          , row.names=FALSE)
+
+write.csv(testing_data, file='testing_data.csv'
+          , row.names=FALSE)
+
+```
+
+
+```{r}
+# STOP: decision made to use 
+# PreProcessing_Feature_Engineering_KNN_IsMetroMicro_Imputation.ipynb
+```
+
