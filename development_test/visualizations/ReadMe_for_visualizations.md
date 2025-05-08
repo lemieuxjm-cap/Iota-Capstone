@@ -1,25 +1,47 @@
-# Summary of Visualizations 
+# EDA Visualizations Archive
 
 ## 📌 Overview
 
-The visualizations folder contains code and image files for plots, graphs, tables, etc., used in reports and submissions for the capstone project
+This folder contains the **exploratory data analysis (EDA) visualizations, diagnostics, and related scripts** developed throughout the capstone project. These materials supported the Module 03 EDA report and additional exploratory analyses.
 
-## EDAVisualizations
-This folder contains the code and image files used in the EDA report for Module 03
-* Choropleth_map_and_box_plot.py - Python file creating the boxplot and choropleth map
-* EDA_Statistics_and_Visuals.ipynb - Python notebook creating exploring statistics and creating visualizations
-* June_MERGED_SDOH_PLUS_UTIL_NAN.csv - merged data used in all EDA visualizations
-* M03_VIF_Reduction.png - image of features' tolerance, VIF and Abs Cor, and whether kept in dataset/codebook going forward
-* Melody_Visuals.ipynb - Python notebook creating pairplot of uninsured, disabled, and elderly data and regional distance to hc barchart
-* VIF_TOL_ABS_CORR.rmd - R Markdown file creating VIF, tolerance and correlation diagnostics and related table
-* VIF_TOL_COR_Reduction.csv - csv of VIF, tolerance and correlation data used for merging with abs corr data
-* Vulnerable_pairplot.png - image produced by Melody_Visuals.ipynb
-* avg_distance.png - image produced by Melody_Visuals.ipynb 
-* util_risk_region_county.png - image produced by Melody_Visuals.ipynb 
+## Contents
+
+- 'figures/':  
+  Contains PNG images of EDA plots, including diagnostic visuals, feature distributions, and clustering results.
+
+- 'EDA_Statistics_and_Visuals.ipynb':  
+  Notebook with core EDA and statistics exploration.
+
+- 'Choropleth_map_and_box_plot.py':  
+  Script for creating the choropleth map and box plot.
+
+- 'Mice Analysis.ipynb':  
+  Notebook analyzing multiple imputation strategies.
+
+- 'Pairplot_Region_Exploration_Visuals.ipynb':  
+  Visuals notebook showing pairplots of uninsured, disabled, and elderly population data.
+
+- 'VIF_TOL_ABS_CORR.rmd':  
+  R Markdown file for variance inflation factor (VIF) diagnostics and correlation analysis.
+
+## 🛠️ Running the Code
+
+- Developed and run in **Google Colab.**
+- For local Jupyter Notebook execution:
+  - Add 'print()' where needed to display outputs.
+  - Install 'rpy2' for R code execution:
+    '''bash
+    pip install rpy2
+    '''
 
 ## 👥 Team
 
 * Mehmet Comert
 * Rea Kelolli
 * June Lemieux
-* Melody Rios 
+* Melody Rios
+
+## 🔎 Notes
+
+The **final subset of polished figures** used in the final report has been moved to 'final_delivery/visualizations/EDAVisualizations/figures/' for easy access.
+
