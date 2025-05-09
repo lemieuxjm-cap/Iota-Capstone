@@ -65,6 +65,42 @@ Using publicly available datasets from the **Agency for Healthcare Research and 
 * GitHub: Version control and team collaboration
 * MS Excel: Reviewing proposed and finalized datasets
 
+## 📂 Repository Organization
+
+This repository includes two main subfolders to clearly separate finalized work from exploratory development:
+
+- **'final_delivery/'**  
+  Contains the finalized deliverables, including:
+  - Polished notebooks (modeling + EDA),
+  - Final cleaned dataset,
+  - Final report,
+  - Polished figures used in the report.
+
+- **'development_test/'**  
+  Contains exploratory notebooks, diagnostic scripts, raw and intermediate datasets, and early-stage visualizations and diagnostics created throughout the project lifecycle.
+
+👉 The **full set of exploratory EDA visualizations and diagnostic materials** is archived in:  
+'development_test/visualizations/EDAVisualizations/'.
+
+👉 The **final polished figures** are located in:  
+'final_delivery/visualizations/EDAVisualizations/figures/'  
+for quick reference and reuse.
+
+---
+
+## ⚙️ Running the Notebooks
+
+- The notebooks were developed and executed in **Google Colab.**
+- For local execution in **Jupyter Notebook:**
+  - Add 'print()' statements around outputs if needed to ensure proper display,
+  - Install 'rpy2' if using notebooks with R code cells:
+    '''bash
+    pip install rpy2
+    '''
+
+- R code chunks inside the notebooks automatically handle R package installations via 'install.packages()' calls inside '%%R' cells.  
+  **No additional manual setup is required beyond the standard dependencies.**
+
 ## 👥 Team
 
 * June Lemieux
